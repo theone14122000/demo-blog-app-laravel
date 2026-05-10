@@ -4,7 +4,7 @@
         <h1>Create Post</h1>
             <!-- Validation Errors -->
             @if($errors->any())
-                <div class="alert alert-danger">
+                <div class="alert alert-danger" id="alert-danger">
                     <ul class="mb-0">
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -34,3 +34,16 @@
 
     </div>
 </x-app-layout>
+<script>
+    setTimeout(() => {
+
+    let alert = document.getElementById('alert-danger');
+
+    if (alert) {
+
+        alert.style.display = 'none';
+
+    }
+
+}, 3000);
+</script>

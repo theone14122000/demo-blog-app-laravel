@@ -28,8 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/');
-    }   
+        if (auth()->user()->is_admin) {
+
+                return redirect('/posts');
+        }
+
+            return redirect('/blog');
+                }   
 
     /**
      * Destroy an authenticated session.

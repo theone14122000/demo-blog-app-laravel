@@ -7,12 +7,12 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 
 class User extends Authenticatable
-{
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+{//hasapitokens is used for API authentication sanctum token creation and management
+     use HasApiTokens, HasFactory, Notifiable;//hasfactory is used to generate fake data for testing 
 
     /**
      * The attributes that are mass assignable.

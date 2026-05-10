@@ -1,3 +1,4 @@
+
 <x-app-layout>
 
     <div class="container mt-4">
@@ -20,7 +21,13 @@
                     Search
                 </button>
             </div>
-        </form>        
+        </form>  
+        <!--success alert-->
+        @if(session('success'))
+            <div class="alert alert-success" id="success-alert">
+                {{ session('success') }}
+            </div>
+        @endif      
         <!-- Posts Grid -->
         <div class="row">
 
@@ -51,24 +58,16 @@
                             <!-- Author -->
                             <p class="small text-secondary mb-2">
                                 By: {{ $post->user->name ?? 'Unknown' }}
-                            </p>
-
-                            <!-- Read More -->
-                            <a href="{{ route('blog.show', $post->id) }}" class="btn btn-sm btn-outline-primary mt-auto">
-                                Read More
-                            </a>
-                            @if(auth()->check() && (
-                                auth()->id() == $post->user_id ||
-                                auth()->user()->is_admin
-                            ))
+                            </p>                            
 
                                 <div class="mt-2 d-flex gap-2">
-
+                                    @can('update', $post)
                                     <a href="{{ route('posts.edit', $post->id) }}"
                                     class="btn btn-sm btn-warning">
                                         Edit
                                     </a>
-
+                                    @endcan
+                                   @can ('delete', $post)
                                     <form action="{{ route('posts.destroy', $post->id) }}"
                                         method="POST">
 
@@ -80,11 +79,12 @@
                                         </button>
 
                                     </form>
-
+                                    @endcan
                                 </div>
-
-                            @endif
-                            
+                              <!-- Read More -->
+                            <a href="{{ route('blog.show', $post->id) }}" class="btn btn-sm btn-outline-primary mt-auto">
+                                Read More
+                            </a>
                             <!--likes-->
                             <button class="btn btn-sm btn-outline-danger like-btn" data-post="{{ $post->id }}">                          
                                  ❤️<span id="likes-count-{{ $post->id }}">
@@ -131,4 +131,17 @@ document.querySelectorAll('.like-btn').forEach(button => {
     });
 
 });
+
+setTimeout(() => {
+
+    let alert = document.getElementById('success-alert');
+
+    if (alert) {
+
+        alert.style.display = 'none';
+
+    }
+
+}, 3000);
+
 </script>
