@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Resources\SinglePostResource;
 use App\Services\PostService;
 use App\Http\Resources\PostResource;
 use App\Http\Requests\StoreApiPostRequest;
@@ -111,17 +112,25 @@ class PostController extends Controller
 
  //-------------------API-------------------------
   
-        public function apiIndex()
+        public function apiIndex(Request $request)
         {
-            $posts = Post::with('user')->latest()->paginate(5);
+            $query = Post::with('user')->latest();
+
+            // Search
+            if ($request->search) {
+                $query->where('title', 'like', '%' . $request->search . '%');
+            }
+
+            $posts = $query->paginate(5);
+
             return PostResource::collection($posts);
         }
 
     public function apiShow(Post $post)
     {
-        $post->load('user', 'comments');
+        $post->load('user', 'comments.user');
 
-        return new PostResource($post);
+        return new SinglePostResource($post);
     }
 
 
